@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Toke | Art • Music • Vision</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ==============================
+       CLICK TO ENTER SCREEN
+    ============================== */
+
+    #enterScreen {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      padding: 25px;
+      text-align: center;
+
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+
+    #enterScreen.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .enter-title {
+      font-size: clamp(2rem, 7vw, 5rem);
+      letter-spacing: 12px;
+      margin-bottom: 15px;
+      font-weight: 900;
+    }
+
+    .enter-text {
+      color: #aaa;
+      letter-spacing: 4px;
+      margin-bottom: 30px;
+      font-size: 0.9rem;
+    }
+
+    .enter-photo {
+      width: min(360px, 82vw);
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      object-fit: cover;
+
+      border: 3px solid white;
+      cursor: pointer;
+
+      animation: photoPulse 2s infinite;
+
+      transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+    }
+
+    .enter-photo:hover {
+      transform: scale(1.04);
+      box-shadow:
+        0 0 20px rgba(255,255,255,.5),
+        0 0 60px rgba(255,255,255,.25);
+    }
+
+    @keyframes photoPulse {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(255,255,255,.3);
+      }
+
+      50% {
+        box-shadow:
+          0 0 30px rgba(255,255,255,.8),
+          0 0 70px rgba(255,255,255,.25);
+      }
+    }
+
+    .click-text {
+      margin-top: 25px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      font-size: 0.85rem;
+      animation: blink 1.4s infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: .35;
+      }
+    }
+
+    /* ==============================
+       MOVING WORD BACKGROUND
+    ============================== */
+
+    .word-background {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .13;
+    }
+
+    .word-row {
+      position: absolute;
+      white-space: nowrap;
+
+      font-size: clamp(3rem, 9vw, 9rem);
+      font-weight: 900;
+
+      color: transparent;
+      -webkit-text-stroke: 1px white;
+
+      text-transform: uppercase;
+      letter-spacing: 8px;
+    }
+
+    .row1 {
+      top: 4%;
+      animation: moveLeft 24s linear infinite;
+    }
+
+    .row2 {
+      top: 24%;
+      animation: moveRight 29s linear infinite;
+    }
+
+    .row3 {
+      top: 45%;
+      animation: moveLeft 32s linear infinite;
+    }
+
+    .row4 {
+      top: 66%;
+      animation: moveRight 26s linear infinite;
+    }
+
+    .row5 {
+      top: 84%;
+      animation: moveLeft 35s linear infinite;
+    }
+
+    @keyframes moveLeft {
+      from {
+        transform: translateX(10%);
+      }
+
+      to {
+        transform: translateX(-55%);
+      }
+    }
+
+    @keyframes moveRight {
+      from {
+        transform: translateX(-55%);
+      }
+
+      to {
+        transform: translateX(10%);
+      }
+    }
+
+    /* ==============================
+       MAIN WEBSITE
+    ============================== */
+
+    #website {
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+
+    #website.show {
+      opacity: 1;
+    }
+
+    /* ==============================
+       HERO
+    ============================== */
+
+    .hero {
+      min-height: 850px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 90px 20px;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 850px;
+    }
+
+    .main-photo {
+      width: min(420px, 85vw);
+      aspect-ratio: 1 / 1;
+
+      border-radius: 50%;
+      object-fit: cover;
+
+      border: 3px solid white;
+
+      margin-bottom: 35px;
+
+      box-shadow:
+        0 0 25px rgba(255,255,255,.25);
+    }
+
+    .hero h1 {
+      font-size: clamp(4rem, 15vw, 10rem);
+
+      font-weight: 900;
+      letter-spacing: 8px;
+      line-height: .9;
+    }
+
+    .hero-subtitle {
+      margin-top: 20px;
+
+      font-size: clamp(.8rem, 3vw, 1.2rem);
+
+      letter-spacing: 8px;
+
+      color: #bbb;
+    }
+
+    .line {
+      width: 80px;
+      height: 2px;
+
+      background: white;
+
+      margin: 30px auto;
+    }
+
+    .quote {
+      max-width: 650px;
+
+      margin: auto;
+
+      color: #ddd;
+
+      line-height: 1.8;
+
+      font-size: 1.05rem;
+    }
+
+    /* ==============================
+       ART SECTION
+    ============================== */
+
+    .art-section {
+      position: relative;
+
+      max-width: 1100px;
+
+      margin: auto;
+
+      padding: 120px 25px;
+    }
+
+    .section-small {
+      letter-spacing: 6px;
+
+      color: #888;
+
+      font-size: .75rem;
+
+      margin-bottom: 15px;
+    }
+
+    .art-section h2 {
+      font-size: clamp(3rem, 10vw, 7rem);
+
+      line-height: .95;
+
+      margin-bottom: 50px;
+    }
+
+    .art-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+
+      gap: 20px;
+    }
+
+    .art-card {
+      min-height: 260px;
+
+      border: 1px solid #333;
+
+      padding: 30px;
+
+      background: rgba(0,0,0,.72);
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: flex-end;
+
+      transition:
+        transform .4s ease,
+        border-color .4s ease,
+        background .4s ease;
+    }
+
+    .art-card:hover {
+      transform: translateY(-8px);
+
+      border-color: white;
+
+      background: rgba(20,20,20,.92);
+    }
+
+    .number {
+      color: #777;
+
+      font-size: .75rem;
+
+      letter-spacing: 3px;
+
+      margin-bottom: auto;
+    }
+
+    .art-card h3 {
+      font-size: 1.8rem;
+
+      margin-bottom: 10px;
+    }
+
+    .art-card p {
+      color: #999;
+
+      line-height: 1.6;
+    }
+
+    /* ==============================
+       STATEMENT
+    ============================== */
+
+    .statement {
+      padding: 130px 25px;
+
+      text-align: center;
+
+      border-top: 1px solid #222;
+      border-bottom: 1px solid #222;
+
+      background: rgba(0,0,0,.8);
+    }
+
+    .statement p {
+      max-width: 900px;
+
+      margin: auto;
+
+      font-size: clamp(2rem, 6vw, 5rem);
+
+      font-weight: 900;
+
+      line-height: 1.05;
+    }
+
+    /* ==============================
+       MUSIC
+    ============================== */
+
+    .music-section {
+      padding: 120px 25px;
+
+      text-align: center;
+    }
+
+    .music-section h2 {
+      font-size: clamp(3rem, 10vw, 7rem);
+
+      margin-bottom: 20px;
+    }
+
+    .music-section p {
+      color: #999;
+
+      letter-spacing: 3px;
+    }
+
+    /* ==============================
+       YOUTUBE PLAYER
+    ============================== */
+
+    #youtubePlayer {
+      position: absolute;
+
+      width: 1px;
+      height: 1px;
+
+      opacity: .01;
+
+      pointer-events: none;
+
+      left: -9999px;
+    }
+
+    /* ==============================
+       FOOTER
+    ============================== */
+
+    footer {
+      text-align: center;
+
+      padding: 50px 20px;
+
+      border-top: 1px solid #222;
+
+      color: #666;
+
+      letter-spacing: 3px;
+
+      font-size: .75rem;
+    }
+
+    /* ==============================
+       MOBILE
+    ============================== */
+
+    @media (max-width: 600px) {
+
+      .hero {
+        min-height: 720px;
+      }
+
+      .enter-title {
+        letter-spacing: 6px;
+      }
+
+      .hero h1 {
+        letter-spacing: 3px;
+      }
+
+      .hero-subtitle {
+        letter-spacing: 4px;
+      }
+
+      .word-row {
+        font-size: 4.5rem;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- =================================
+     CLICK PHOTO FIRST
+================================= -->
+
+<section id="enterScreen">
+
+  <h1 class="enter-title">
+    TOKE
+  </h1>
+
+  <p class="enter-text">
+    ART • MUSIC • VISION
+  </p>
+
+  <img
+    src="toke.png"
+    alt="Toke"
+    class="enter-photo"
+    id="enterPhoto"
+  >
+
+  <p class="click-text">
+    CLICK THE PHOTO TO ENTER
+  </p>
+
+</section>
+
+
+<!-- =================================
+     MOVING ART WORDS
+================================= -->
+
+<div class="word-background">
+
+  <div class="word-row row1">
+    ART • CREATE • VISION • EXPRESSION • ART • CREATE • VISION • EXPRESSION •
+  </div>
+
+  <div class="word-row row2">
+    MUSIC • CULTURE • SOUL • SOUND • MUSIC • CULTURE • SOUL • SOUND •
+  </div>
+
+  <div class="word-row row3">
+    IMAGINATION • DESIGN • PASSION • ORIGINAL • IMAGINATION • DESIGN • PASSION •
+  </div>
+
+  <div class="word-row row4">
+    CREATE • INSPIRE • DREAM • BUILD • CREATE • INSPIRE • DREAM • BUILD •
+  </div>
+
+  <div class="word-row row5">
+    ARTIST • CREATOR • VISIONARY • TOKE • ARTIST • CREATOR • VISIONARY • TOKE •
+  </div>
+
+</div>
+
+
+<!-- =================================
+     WEBSITE
+================================= -->
+
+<main id="website">
+
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <img
+        src="toke.png"
+        alt="Toke"
+        class="main-photo"
+      >
+
+      <h1>
+        TOKE
+      </h1>
+
+      <div class="line"></div>
+
+      <p class="hero-subtitle">
+        ART • MUSIC • CREATIVITY • VISION
+      </p>
+
+      <div class="line"></div>
+
+      <p class="quote">
+        Art is more than something you see.
+        It is something you feel.
+        Every sound, image, idea and creation
+        tells a story.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ART -->
+
+  <section class="art-section">
+
+    <p class="section-small">
+      THE CREATIVE MIND
+    </p>
+
+    <h2>
+      ART HAS<br>
+      NO LIMITS.
+    </h2>
+
+    <div class="art-grid">
+
+      <div class="art-card">
+
+        <span class="number">
+          01
+        </span>
+
+        <h3>
+          VISION
+        </h3>
+
+        <p>
+          Seeing something before the rest
+          of the world can see it.
+        </p>
+
+      </div>
+
+
+      <div class="art-card">
+
+        <span class="number">
+          02
+        </span>
+
+        <h3>
+          SOUND
+        </h3>
+
+        <p>
+          Turning emotion, rhythm and life
+          into music.
+        </p>
+
+      </div>
+
+
+      <div class="art-card">
+
+        <span class="number">
+          03
+        </span>
+
+        <h3>
+          CREATE
+        </h3>
+
+        <p>
+          Taking an idea from your imagination
+          and making it real.
+        </p>
+
+      </div>
+
+
+      <div class="art-card">
+
+        <span class="number">
+          04
+        </span>
+
+        <h3>
+          EXPRESSION
+        </h3>
+
+        <p>
+          Art gives a voice to things
+          words cannot always explain.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- STATEMENT -->
+
+  <section class="statement">
+
+    <p>
+      CREATE WHAT YOU FEEL.<br>
+      SHOW WHAT YOU SEE.<br>
+      BECOME YOUR VISION.
+    </p>
+
+  </section>
+
+
+  <!-- MUSIC -->
+
+  <section class="music-section">
+
+    <p class="section-small">
+      SOUND + ART
+    </p>
+
+    <h2>
+      THE MUSIC.
+    </h2>
+
+    <p>
+      MUSIC IS ART YOU CAN HEAR.
+    </p>
+
+  </section>
+
+
+  <footer>
+
+    TOKE • ART • MUSIC • VISION
+
+  </footer>
+
+</main>
+
+
+<!-- =================================
+     YOUTUBE MUSIC
+================================= -->
+
+<iframe
+  id="youtubePlayer"
+  src=""
+  title="Toke Music"
+  allow="autoplay; encrypted-media"
+  allowfullscreen>
+</iframe>
+
+
+<script>
+
+  const enterPhoto =
+    document.getElementById("enterPhoto");
+
+  const enterScreen =
+    document.getElementById("enterScreen");
+
+  const website =
+    document.getElementById("website");
+
+  const youtubePlayer =
+    document.getElementById("youtubePlayer");
+
+
+  enterPhoto.addEventListener("click", function () {
+
+    /*
+      Your YouTube video:
+      https://youtu.be/SEeP8SdhqrU
+    */
+
+    youtubePlayer.src =
+      "https://www.youtube.com/embed/SEeP8SdhqrU?autoplay=1&playsinline=1";
+
+
+    enterScreen.classList.add("hide");
+
+    website.classList.add("show");
+
+
+    setTimeout(function () {
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }, 300);
+
+  });
+
+</script>
+
+</body>
+</html>
